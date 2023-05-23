@@ -67,6 +67,66 @@ def jacobi(ite, tol, K, F):
 
 
 
+def gaussSeidel(ite, tol, K, F):
+    continuar = True
+    tamanho = len(K)
+
+    erroMax = 0
+    lista_x = []
+    lista_err = []
+    for i in range(tamanho):
+        lista_x.append(0)
+        lista_err.append(0)
+        
+    erroMax = 0
+
+    numeroIteracoes = 0
+
+    linhas_x = []
+    for i in range(len(K)):
+        linhas_x.append(0)
+    
+    while continuar:
+        for i in range(len(linhas_x)):
+            temp= 0
+            temp2 = 0
+            for j in range(len(linhas_x)):
+                if i != j:
+                    if i == 0:
+                        temp = K[i][j] * lista_x[j]
+                        temp2 = temp + temp2
+                    else:
+                        temp = K[i][j] * linhas_x[j]
+                        temp2 = temp + temp2
+                           
+            linhas_x[i] = (F[i][0] - temp2) / K[i][i]
+
+        try:
+            for i in range(len(linhas_x)):
+                if (linhas_x[i] != 0):
+                    lista_err[i] = abs((linhas_x[i] - lista_x[i]) / linhas_x[i])
+        except:
+            pass
+        
+
+        for i in range(len(linhas_x)):
+            lista_x[i] = linhas_x[i]
+
+        numeroIteracoes += 1
+
+        if numeroIteracoes == ite:
+            continuar = False
+        count = 0
+        for i in range(len(lista_err)):
+            if lista_err[i] < tol and numeroIteracoes > 1:
+                count += 1
+        if count == len(lista_err):
+            continuar = False
+     
+    erroMax = max(lista_err)
+    return [lista_x]
+
+
 [nn,N,nm,Inc,nc,F,nr,R] = importa('entrada.xlsx')
 
 #plota(N,Inc)
@@ -188,9 +248,13 @@ print("Deformações: \n",lista_deforma)
 print("Tensões: \n",lista_tensao)
 
 
-jacob = jacobi(1000, 0.001 , matrix_simpl, forca_simp)
+jacob = jacobi(1000, 0.0000000000001 , matrix_simpl, forca_simp)
 
 print("Deslocamentos Jacobi: \n",jacob[0])
+
+gauss = gaussSeidel(1000, 0.0000000000001 , matrix_simpl, forca_simp)
+
+print("Deslocamentos Gauss-Seidel: \n",gauss[0])
 
 
 
