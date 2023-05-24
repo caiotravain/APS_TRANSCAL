@@ -280,15 +280,15 @@ Epsi = lista_deforma
 Fi = lista_forca_int
 Ti = lista_tensao
 
-nome = "saida_numpy"
+nome = "saidanumpy"
 
 geraSaida(nome,Ft,Ut,Epsi,Fi,Ti)
 
-nome = "saida_jacobi"
+nome = "saidajacobi"
 
 geraSaida(nome,Ft,jacob,Epsi,Fi,Ti)
 
-nome = "saida_gauss"
+nome = "saidagauss"
 
 geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
