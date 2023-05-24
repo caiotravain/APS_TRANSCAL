@@ -129,7 +129,7 @@ def gaussSeidel(ite, tol, K, F):
 
 [nn,N,nm,Inc,nc,F,nr,R] = importa('entrada.xlsx')
 
-#plota(N,Inc)
+plota(N,Inc)
 
 lista_kg = np.zeros((nn*2, nn*2))
 
