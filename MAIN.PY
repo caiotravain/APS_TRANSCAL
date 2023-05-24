@@ -218,6 +218,7 @@ reacoes = reacoes[R.astype(int)]
 #calcular tensao e deformacao
 lista_deforma = []
 lista_tensao = []
+lista_forca_int = []
 index_u = 0
 for i in range(nm):
     n1 = int(Inc[i,0])
@@ -243,21 +244,53 @@ for i in range(nm):
     
     lista_deforma.append(e)
     lista_tensao.append(s)
+    lista_forca_int.append(s*A)
 
 print("Deformações: \n",lista_deforma)
 print("Tensões: \n",lista_tensao)
 
-
 jacob = jacobi(1000, 0.0000000000001 , matrix_simpl, forca_simp)
-
-print("Deslocamentos Jacobi: \n",jacob[0])
 
 gauss = gaussSeidel(1000, 0.0000000000001 , matrix_simpl, forca_simp)
 
-print("Deslocamentos Gauss-Seidel: \n",gauss[0])
+
+for i in R.astype(int):
+    jacob = np.insert(jacob, i, 0)
+
+for i in R.astype(int):
+    gauss = np.insert(gauss, i, 0)
 
 
 
+print("Deslocamentos Jacobi: \n",jacob)
+
+
+print("Deslocamentos Gauss-Seidel: \n",gauss)
+
+
+#compara gauss e u_compl
+
+print("Diferença entre Gauss e u_compl: \n",gauss - u_compl)
+
+
+
+Ft = reacoes
+Ut = u_compl
+Epsi = lista_deforma
+Fi = lista_forca_int
+Ti = lista_tensao
+
+nome = "saida_numpy"
+
+geraSaida(nome,Ft,Ut,Epsi,Fi,Ti)
+
+nome = "saida_jacobi"
+
+geraSaida(nome,Ft,jacob,Epsi,Fi,Ti)
+
+nome = "saida_gauss"
+
+geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
 
 #reacoes 
