@@ -292,7 +292,6 @@ nome = "saidagauss"
 
 geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
-
 #reacoes 
 
 
