@@ -262,15 +262,15 @@ for i in R.astype(int):
 
 
 
-print("Deslocamentos Jacobi: \n",jacob)
+# print("Deslocamentos Jacobi: \n",jacob)
 
 
-print("Deslocamentos Gauss-Seidel: \n",gauss)
+# print("Deslocamentos Gauss-Seidel: \n",gauss)
 
 
-#compara gauss e u_compl
+# #compara gauss e u_compl
 
-print("Diferença entre Gauss e u_compl: \n",gauss - u_compl)
+# print("Diferença entre Gauss e u_compl: \n",gauss - u_compl)
 
 
 
@@ -292,6 +292,32 @@ nome = "saidagauss"
 
 geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
+
+lista_novas_posicoes_x = []
+lista_novas_posicoes_y = []
+
+for i in range(nn):
+    x = N[0,i]
+    y = N[1,i]
+
+
+    x2 = x + u_compl[i*2]
+    y2 = y + u_compl[i*2+1]
+
+    if i in R.astype(int):
+        lista_novas_posicoes_x.append(x)
+        lista_novas_posicoes_y.append(y) 
+    else:
+        lista_novas_posicoes_x.append(x2)
+        lista_novas_posicoes_y.append(y2)
+
+lista_novas_posicoes = np.array([lista_novas_posicoes_x, lista_novas_posicoes_y])
+
+#diferenca entre posicoes originais e novas
+
+
+
+plota(lista_novas_posicoes,Inc)
 #reacoes 
 
 
