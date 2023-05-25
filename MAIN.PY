@@ -120,7 +120,7 @@ def gaussSeidel(ite, tol, K, F):
     return [lista_x]
 
 
-[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada.xlsx')
+[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada2.xlsx')
 
 plota(N,Inc)
 
@@ -292,6 +292,7 @@ lista_novas_posicoes_y = []
 
 
 
+fator = 1
 
 for i in range(nn):
     x = N[0,i]
@@ -301,29 +302,74 @@ for i in range(nn):
     x2 = x + u_compl[i*2]
     y2 = y + u_compl[i*2+1]
 
-    
+    desl_x = u_compl[i*2]
+    desl_y = u_compl[i*2+1]
 
 
     if i in R.astype(int):
         lista_novas_posicoes_x.append(x)
         lista_novas_posicoes_y.append(y) 
-    else:
-        while abs(x2 - x) + abs(y2 - y) < 0.1 :
-            x2 *= 1.05
-            y2 *= 1.05
+    else:            
         lista_novas_posicoes_x.append(x2)
         lista_novas_posicoes_y.append(y2)
 
 
 
-
 lista_novas_posicoes = np.array([lista_novas_posicoes_x, lista_novas_posicoes_y])
 
+
+
+fator = 1
+
+lista_novas_posicoes_sem_o = lista_novas_posicoes[lista_novas_posicoes != 0]
+N_sem_o = N[lista_novas_posicoes != 0]
+
+lista_temp = lista_novas_posicoes_sem_o
+
+input = int(input("Digite o fator de aumento minimo para a escala [recomendação de 10000 para ex1 e 100 para ex2]:"))
+
+while (abs(lista_temp - N_sem_o).max()< input):
+    fator = fator * 1.1
+    lista_temp = lista_novas_posicoes_sem_o * fator
+
+print("Fator de escala: ",fator)
+
+lista_novas_posicoes_x_fator = []
+lista_novas_posicoes_y_fator = []
+for i in range(nn):
+    x = N[0,i]
+    y = N[1,i]
+
+
+    x2 = x + u_compl[i*2]
+    y2 = y + u_compl[i*2+1]
+
+    desl_x = u_compl[i*2] * fator
+    desl_y = u_compl[i*2+1] * fator
+    
+
+    x2 = x + desl_x
+    y2 = y + desl_y  
+
+   
+
+
+    lista_novas_posicoes_x_fator.append(x2)
+    lista_novas_posicoes_y_fator.append(y2)
+
+
+    
+lista_novas_posicoes_fator = np.array([lista_novas_posicoes_x_fator, lista_novas_posicoes_y_fator])
+
+
+
+
 #diferenca entre posicoes originais e novas
+print("Diferença entre posições originais e novas: \n",lista_novas_posicoes_fator - N)
 
 
 
-plota_mais(lista_novas_posicoes,Inc)
+plota_mais(lista_novas_posicoes_fator,Inc)
 #reacoes 
 
 
