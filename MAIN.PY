@@ -2,13 +2,6 @@ from funcoesTermosol import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-def matprint(mat, fmt="g"):
-    col_maxes = [max([len(("{:"+fmt+"}").format(x)) for x in col]) for col in mat.T]
-    for x in mat:
-        for i, y in enumerate(x):
-            print(("{:"+str(col_maxes[i])+fmt+"}").format(y), end="  ")
-        print("")
-  
 
 def jacobi(ite, tol, K, F):
     tamanho = len(K)
@@ -296,6 +289,10 @@ geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 lista_novas_posicoes_x = []
 lista_novas_posicoes_y = []
 
+
+
+
+
 for i in range(nn):
     x = N[0,i]
     y = N[1,i]
@@ -304,12 +301,21 @@ for i in range(nn):
     x2 = x + u_compl[i*2]
     y2 = y + u_compl[i*2+1]
 
+    
+
+
     if i in R.astype(int):
         lista_novas_posicoes_x.append(x)
         lista_novas_posicoes_y.append(y) 
     else:
+        while abs(x2 - x) + abs(y2 - y) < 0.1 :
+            x2 *= 1.05
+            y2 *= 1.05
         lista_novas_posicoes_x.append(x2)
         lista_novas_posicoes_y.append(y2)
+
+
+
 
 lista_novas_posicoes = np.array([lista_novas_posicoes_x, lista_novas_posicoes_y])
 
@@ -317,7 +323,7 @@ lista_novas_posicoes = np.array([lista_novas_posicoes_x, lista_novas_posicoes_y]
 
 
 
-plota(lista_novas_posicoes,Inc)
+plota_mais(lista_novas_posicoes,Inc)
 #reacoes 
 
 
