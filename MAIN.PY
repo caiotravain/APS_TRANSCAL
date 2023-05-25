@@ -54,7 +54,7 @@ def jacobi(ite, tol, K, F):
                 count += 1
         if count == len(lista_err):
             continuar = False
-     
+    print("Numero de iteracoes: ", numeroIteracoes)
     erroMax = max(lista_err)
     return [lista_x]
 
@@ -120,7 +120,7 @@ def gaussSeidel(ite, tol, K, F):
     return [lista_x]
 
 
-[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada2.xlsx')
+[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada.xlsx')
 
 plota(N,Inc)
 
@@ -244,7 +244,7 @@ print("Tensões: \n",lista_tensao)
 
 jacob = jacobi(1000, 0.0000000000001 , matrix_simpl, forca_simp)
 
-gauss = gaussSeidel(1000, 0.0000000000001 , matrix_simpl, forca_simp)
+gauss = gaussSeidel(10000, 0.0000000000001 , matrix_simpl, forca_simp)
 
 
 for i in R.astype(int):
@@ -321,16 +321,11 @@ lista_novas_posicoes = np.array([lista_novas_posicoes_x, lista_novas_posicoes_y]
 
 fator = 1
 
-lista_novas_posicoes_sem_o = lista_novas_posicoes[lista_novas_posicoes != 0]
-N_sem_o = N[lista_novas_posicoes != 0]
 
-lista_temp = lista_novas_posicoes_sem_o
 
-input = int(input("Digite o fator de aumento minimo para a escala [recomendação de 10000 para ex1 e 100 para ex2]:"))
+fator = int(input("Digite o fator de aumento minimo para a escala [recomendação de 10000 para ex1 e 100 para ex2]:"))
 
-while (abs(lista_temp - N_sem_o).max()< input):
-    fator = fator * 1.1
-    lista_temp = lista_novas_posicoes_sem_o * fator
+
 
 print("Fator de escala: ",fator)
 
