@@ -54,7 +54,6 @@ def jacobi(ite, tol, K, F):
                 count += 1
         if count == len(lista_err):
             continuar = False
-    print("Numero de iteracoes: ", numeroIteracoes)
     erroMax = max(lista_err)
     return [lista_x]
 
@@ -120,7 +119,7 @@ def gaussSeidel(ite, tol, K, F):
     return [lista_x]
 
 
-[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada.xlsx')
+[nn,N,nm,Inc,nc,F,nr,R] = importa('entrada2.xlsx')
 
 plota(N,Inc)
 
@@ -242,7 +241,7 @@ for i in range(nm):
 print("Deformações: \n",lista_deforma)
 print("Tensões: \n",lista_tensao)
 
-jacob = jacobi(1000, 0.0000000000001 , matrix_simpl, forca_simp)
+jacob = jacobi(10000, 0.0000000000001 , matrix_simpl, forca_simp)
 
 gauss = gaussSeidel(10000, 0.0000000000001 , matrix_simpl, forca_simp)
 
@@ -277,13 +276,7 @@ nome = "saidanumpy"
 
 geraSaida(nome,Ft,Ut,Epsi,Fi,Ti)
 
-nome = "saidajacobi"
 
-geraSaida(nome,Ft,jacob,Epsi,Fi,Ti)
-
-nome = "saidagauss"
-
-geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
 
 lista_novas_posicoes_x = []
@@ -368,9 +361,83 @@ plota_mais(lista_novas_posicoes_fator,Inc)
 #reacoes 
 
 
+lista_deforma = []
+lista_tensao = []
+lista_forca_int = []
+index_u = 0
+for i in range(nm):
+    n1 = int(Inc[i,0])
+    n2 = int(Inc[i,1])        
+    E = Inc[i,2]
+    A = Inc[i,3]
+    x1 = N[0,n1-1]
+    y1 = N[1,n1-1]
+    x2 = N[0,n2-1]
+    y2 = N[1,n2-1]
+    L = np.sqrt((x2-x1)**2 + (y2-y1)**2)
+    cos = (x2-x1)/L
+    sen = (y2-y1)/L
+    index1 = (n1 - 1) *2
+    index2 = (n2 - 1) *2
+    try:
+        temp_desl = np.array([gauss[index1], gauss[index1+1], gauss[index2 ], gauss[index2 +1]])
+        s = E/L* np.dot(np.array([-cos, -sen, cos, sen]), temp_desl)
+        e = 1/L* np.dot(np.array([-cos, -sen, cos, sen]), temp_desl)
+    except:
+        pass
+
+    
+    lista_deforma.append(e)
+    lista_tensao.append(s)
+    lista_forca_int.append(s*A)
 
 
+nome = "saidagauss"
+Ft = reacoes
+Ut = u_compl
+Epsi = lista_deforma
+Fi = lista_forca_int
+Ti = lista_tensao
 
+geraSaida(nome,Ft,gauss,Epsi,Fi,Ti)
 
  
+lista_deforma = []
+lista_tensao = []
+lista_forca_int = []
+index_u = 0
+for i in range(nm):
+    n1 = int(Inc[i,0])
+    n2 = int(Inc[i,1])        
+    E = Inc[i,2]
+    A = Inc[i,3]
+    x1 = N[0,n1-1]
+    y1 = N[1,n1-1]
+    x2 = N[0,n2-1]
+    y2 = N[1,n2-1]
+    L = np.sqrt((x2-x1)**2 + (y2-y1)**2)
+    cos = (x2-x1)/L
+    sen = (y2-y1)/L
+    index1 = (n1 - 1) *2
+    index2 = (n2 - 1) *2
+    try:
+        temp_desl = np.array([jacob[index1], jacob[index1+1], jacob[index2 ], jacob[index2 +1]])
+        s = E/L* np.dot(np.array([-cos, -sen, cos, sen]), temp_desl)
+        e = 1/L* np.dot(np.array([-cos, -sen, cos, sen]), temp_desl)
+    except:
+        pass
 
+    
+    lista_deforma.append(e)
+    lista_tensao.append(s)
+    lista_forca_int.append(s*A)
+
+
+nome = "saidajacobi"
+Ft = reacoes
+Ut = u_compl
+Epsi = lista_deforma
+Fi = lista_forca_int
+Ti = lista_tensao
+
+geraSaida(nome,Ft,jacob,Epsi,Fi,Ti)
